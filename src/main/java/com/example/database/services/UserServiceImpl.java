@@ -53,13 +53,29 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<Goal> userGoalList(int user_id) {
-		List<Goal> goals = goalRepository.findByUserId(user_id);
-		return goals;
+		return goalRepository.findByUserId(user_id);
+//		return goals;
 	}
 
 	@Override
 	public Goal userAddGoal(Goal goal) {
-		Goal goalData = goalRepository.save(goal);
+		return goalRepository.save(goal);
+//		return goalData;
+	}
+
+	@Override
+	public Goal userEditGoal(Goal goal, int id) {
+		Goal goalData = goalRepository.findById(id);
+		goalData.setGoal(goal.getGoal());
+		goalData.setTarget(goal.getTarget());
+		goalRepository.save(goalData);
+		return goalData;
+	}
+
+	@Override
+	public Goal userDeleteGoal(int id) {
+		Goal goalData = goalRepository.findById(id);
+		goalRepository.deleteById(id);
 		return goalData;
 	}
 }

@@ -14,4 +14,6 @@ public interface UserService {
 	public User deleteUser(int id);
 	public List<Goal> userGoalList(int user_id);
 	public Goal userAddGoal(Goal goal);
+	public Goal userEditGoal(Goal goal, int id);
+	public Goal userDeleteGoal(int goal_id);
 }
