@@ -1,14 +1,18 @@
 package com.example.database.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.database.beans.LoginResponse;
+import com.example.database.beans.Period;
 import com.example.database.model.Goal;
+import com.example.database.model.QuaterTimeSheet;
 import com.example.database.model.User;
 import com.example.database.repositories.GoalRepository;
+import com.example.database.repositories.QuaterTimeSheetRepository;
 import com.example.database.repositories.UserRepository;
 
 @Service
@@ -16,9 +20,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
 	@Autowired
 	private GoalRepository goalRepository;
+	@Autowired
+	private QuaterTimeSheetRepository quaterTimeSheetRepository;
 	
 	@Override
 	public List<User> getAllUsers(){
@@ -54,13 +59,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Goal> userGoalList(int user_id) {
 		return goalRepository.findByUserId(user_id);
-//		return goals;
 	}
 
 	@Override
 	public Goal userAddGoal(Goal goal) {
 		return goalRepository.save(goal);
-//		return goalData;
 	}
 
 	@Override
@@ -75,7 +78,56 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Goal userDeleteGoal(int id) {
 		Goal goalData = goalRepository.findById(id);
+		List<QuaterTimeSheet> timesheet = quaterTimeSheetRepository.findByGoalId(id);
 		goalRepository.deleteById(id);
+		for (QuaterTimeSheet time : timesheet) {
+			quaterTimeSheetRepository.deleteById(time.getId());
+		}
 		return goalData;
+	}
+	
+	@Override
+	public List<QuaterTimeSheet> getAllResultByPeriod(Period period) {
+		List<QuaterTimeSheet> timeList = quaterTimeSheetRepository.findAll();
+		List<QuaterTimeSheet> periodTimeList = new ArrayList<>();
+		for (QuaterTimeSheet timesheet : timeList) {
+			if(timesheet.getDate() > period.getStart() && timesheet.getDate() < period.getEnd()) {
+				periodTimeList.add(timesheet);
+			}
+		}
+		return periodTimeList;
+	}
+
+	@Override
+	public List<QuaterTimeSheet> getResultByPeriod(int goal_id, Period period) {
+		List<QuaterTimeSheet> timeList = quaterTimeSheetRepository.findByGoalId(goal_id);
+		List<QuaterTimeSheet> periodTimeList = new ArrayList<>();
+		for (QuaterTimeSheet timesheet : timeList) {
+			if(timesheet.getDate() > period.getStart() && timesheet.getDate() < period.getEnd()) {
+				periodTimeList.add(timesheet);
+			}
+		}
+		return periodTimeList;
+	}
+
+	@Override
+	public QuaterTimeSheet addTimeSheet(QuaterTimeSheet quaterTimeSheet) {
+		return quaterTimeSheetRepository.save(quaterTimeSheet);
+	}
+
+	@Override
+	public QuaterTimeSheet editTimeSheet(QuaterTimeSheet quaterTimeSheet, int id) {
+		QuaterTimeSheet timesheetData = quaterTimeSheetRepository.findById(id);
+		timesheetData.setDate(quaterTimeSheet.getDate());
+		timesheetData.setScore(quaterTimeSheet.getScore());
+		quaterTimeSheetRepository.save(timesheetData);
+		return timesheetData;
+	}
+
+	@Override
+	public QuaterTimeSheet deleteTimeSheet(int timesheet_id) {
+		QuaterTimeSheet timesheetData = quaterTimeSheetRepository.findById(timesheet_id);
+		quaterTimeSheetRepository.deleteById(timesheet_id);
+		return timesheetData;
 	}
 }

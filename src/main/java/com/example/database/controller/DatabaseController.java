@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.database.beans.LoginResponse;
+import com.example.database.beans.Period;
 import com.example.database.model.Goal;
+import com.example.database.model.QuaterTimeSheet;
 import com.example.database.model.User;
 import com.example.database.services.UserServiceImpl;
 
@@ -80,5 +82,36 @@ public class DatabaseController {
 	@ResponseBody
 	public Goal deleteGoal(@PathVariable int id) {
 		return userService.userDeleteGoal(id);
+	}
+	
+	//Data table TimeSheet
+	@PostMapping("/time/getAllTimeSheet")
+	@ResponseBody
+	public List<QuaterTimeSheet> userGetAllTimeSheet(@RequestBody Period period) {
+		return userService.getAllResultByPeriod(period);
+	}	
+	
+	@PostMapping("/time/getTimeSheet/{goal_id}")
+	@ResponseBody
+	public List<QuaterTimeSheet> userGetTimeSheet(@PathVariable int goal_id, @RequestBody Period period) {
+		return userService.getResultByPeriod(goal_id, period);
+	}
+	
+	@PostMapping("/time/addTimeSheet")
+	@ResponseBody
+	public QuaterTimeSheet userAddTimeSheet(@RequestBody QuaterTimeSheet quaterTimeSheet) {
+		return userService.addTimeSheet(quaterTimeSheet);
+	}
+	
+	@PutMapping("/time/editTimeSheet/{id}")
+	@ResponseBody
+	public QuaterTimeSheet userEditTimeSheet(@RequestBody QuaterTimeSheet quaterTimeSheet, @PathVariable int id) {
+		return userService.editTimeSheet(quaterTimeSheet, id);
+	}
+	
+	@DeleteMapping("/time/deleteTimeSheet/{timesheet_id}")
+	@ResponseBody
+	public QuaterTimeSheet userDeleteTimeSheet(@PathVariable int timesheet_id) {
+		return userService.deleteTimeSheet(timesheet_id);
 	}
 }
