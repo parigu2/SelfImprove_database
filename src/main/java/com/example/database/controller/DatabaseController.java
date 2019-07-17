@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.database.beans.GoalAndTimeSheets;
 import com.example.database.beans.LoginResponse;
 import com.example.database.beans.Period;
+import com.example.database.beans.ResultTable;
 import com.example.database.model.Goal;
 import com.example.database.model.QuaterTimeSheet;
 import com.example.database.model.User;
@@ -113,5 +115,18 @@ public class DatabaseController {
 	@ResponseBody
 	public QuaterTimeSheet userDeleteTimeSheet(@PathVariable int timesheet_id) {
 		return userService.deleteTimeSheet(timesheet_id);
+	}
+	
+	//Join Table
+	@RequestMapping("/join/user/{user_id}")
+	@ResponseBody
+	public List<GoalAndTimeSheets> getUserAll(@PathVariable int user_id) {
+		return userService.getUsersAllTimeSheet(user_id);
+	}
+	
+	@RequestMapping("/join/all")
+	@ResponseBody
+	public List<ResultTable> getAllUserDetail() {
+		return userService.getAllUsersDetails();
 	}
 }
