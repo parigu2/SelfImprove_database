@@ -69,4 +69,16 @@ public class DatabaseController {
 		Goal newGoal = userService.userAddGoal(goal);
 		return newGoal;
 	}
+	
+	@PutMapping("/goal/editGoal/{id}")
+	@ResponseBody
+	public Goal editGoal(@RequestBody Goal goal, @PathVariable int id) {
+		return userService.userEditGoal(goal, id);
+	}
+	
+	@DeleteMapping("/goal/deleteGoal/{id}")
+	@ResponseBody
+	public Goal deleteGoal(@PathVariable int id) {
+		return userService.userDeleteGoal(id);
+	}
 }
