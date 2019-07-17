@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.database.beans.GoalAndTimeSheets;
 import com.example.database.beans.LoginResponse;
 import com.example.database.beans.Period;
+import com.example.database.beans.ResultTable;
 import com.example.database.model.Goal;
 import com.example.database.model.QuaterTimeSheet;
 import com.example.database.model.User;
@@ -54,6 +56,11 @@ public class UserServiceImpl implements UserService {
 			goalRepository.deleteById(goal.getId());
 		}
 		return userData;
+	}
+	
+	@Override
+	public List<Goal> userAllGoalList() {
+		return goalRepository.findAll();
 	}
 
 	@Override
@@ -129,5 +136,25 @@ public class UserServiceImpl implements UserService {
 		QuaterTimeSheet timesheetData = quaterTimeSheetRepository.findById(timesheet_id);
 		quaterTimeSheetRepository.deleteById(timesheet_id);
 		return timesheetData;
+	}
+	
+	@Override
+	public List<GoalAndTimeSheets> getUsersAllTimeSheet(int user_id) {
+		List<Goal> goals = goalRepository.findByUserId(user_id);
+		List<GoalAndTimeSheets> result = new ArrayList<GoalAndTimeSheets>();
+		for (Goal goal : goals) {
+			result.add(new GoalAndTimeSheets(goal.getId(), user_id, goal.getGoal(), goal.getTarget(), quaterTimeSheetRepository.findByGoalId(goal.getId())));
+		}
+		return result;
+	}
+	
+	@Override
+	public List<ResultTable> getAllUsersDetails() {
+		List<User> users = userRepository.findAll();
+		List<ResultTable> result = new ArrayList<ResultTable>();
+		for (User user : users) {
+			result.add(new ResultTable(user.getId(), user.getName(), getUsersAllTimeSheet(user.getId())));
+		}
+		return result;
 	}
 }
