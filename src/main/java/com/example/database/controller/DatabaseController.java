@@ -3,6 +3,7 @@ package com.example.database.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,7 @@ public class DatabaseController {
 		return userService.getAllUsers();
 	}
 	
+	@CrossOrigin(origins = "*")
 	@PostMapping("/createUser")
 	@ResponseBody
 	public boolean createUser(@RequestBody User user) {
@@ -43,6 +45,7 @@ public class DatabaseController {
 		return response.isResult();
 	}
 	
+	@CrossOrigin(origins = "*")
 	@PutMapping("/editUser/{id}")
 	@ResponseBody
 	public User editUser(@RequestBody User user, @PathVariable int id) {
@@ -50,6 +53,7 @@ public class DatabaseController {
 		return editUser;
 	}
 	
+	@CrossOrigin(origins = "*")
 	@DeleteMapping("/deleteUser/{id}")
 	@ResponseBody
 	public User deleteUser(@PathVariable int id) {
@@ -67,6 +71,7 @@ public class DatabaseController {
 		return goals;
 	}
 	
+	@CrossOrigin(origins = "*")
 	@PostMapping("/goal/addGoal")
 	@ResponseBody
 	public Goal addGoal(@RequestBody Goal goal) {
@@ -74,12 +79,14 @@ public class DatabaseController {
 		return newGoal;
 	}
 	
+	@CrossOrigin(origins = "*")
 	@PutMapping("/goal/editGoal/{id}")
 	@ResponseBody
 	public Goal editGoal(@RequestBody Goal goal, @PathVariable int id) {
 		return userService.userEditGoal(goal, id);
 	}
 	
+	@CrossOrigin(origins = "*")
 	@DeleteMapping("/goal/deleteGoal/{id}")
 	@ResponseBody
 	public Goal deleteGoal(@PathVariable int id) {
@@ -87,30 +94,35 @@ public class DatabaseController {
 	}
 	
 	//Data table TimeSheet
+	@CrossOrigin(origins = "*")
 	@PostMapping("/time/getAllTimeSheet")
 	@ResponseBody
 	public List<QuaterTimeSheet> userGetAllTimeSheet(@RequestBody Period period) {
 		return userService.getAllResultByPeriod(period);
 	}	
 	
+	@CrossOrigin(origins = "*")
 	@PostMapping("/time/getTimeSheet/{goal_id}")
 	@ResponseBody
 	public List<QuaterTimeSheet> userGetTimeSheet(@PathVariable int goal_id, @RequestBody Period period) {
 		return userService.getResultByPeriod(goal_id, period);
 	}
 	
+	@CrossOrigin(origins = "*")
 	@PostMapping("/time/addTimeSheet")
 	@ResponseBody
 	public QuaterTimeSheet userAddTimeSheet(@RequestBody QuaterTimeSheet quaterTimeSheet) {
 		return userService.addTimeSheet(quaterTimeSheet);
 	}
 	
+	@CrossOrigin(origins = "*")
 	@PutMapping("/time/editTimeSheet/{id}")
 	@ResponseBody
 	public QuaterTimeSheet userEditTimeSheet(@RequestBody QuaterTimeSheet quaterTimeSheet, @PathVariable int id) {
 		return userService.editTimeSheet(quaterTimeSheet, id);
 	}
 	
+	@CrossOrigin(origins = "*")
 	@DeleteMapping("/time/deleteTimeSheet/{timesheet_id}")
 	@ResponseBody
 	public QuaterTimeSheet userDeleteTimeSheet(@PathVariable int timesheet_id) {
